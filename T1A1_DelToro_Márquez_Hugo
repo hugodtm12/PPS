@@ -1,0 +1,82 @@
+1. Crea un script que muestre en pantalla el nombre de dicho script.
+
+#!/bin/bash
+echo "El nombre del script es: $0"
+
+2. Crea un script que muestre en pantalla el contenido de un archivo a partir del segundo
+parámetro recibido. El segundo parámetro recibido debería ser la ruta (relativa o absoluta) a
+un archivo existente. Finalmente muestra el exit code del comando usado para visualizar el
+archivo.
+Cuando hayas realizado el script, y comprobado que funciona correctamente, realiza la
+siguiente prueba: Pasa como 2º parámetro la ruta a un archivo sobre el que no tengas permiso
+de lectura.
+
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+    echo "Uso: $0 <parámetro1> <ruta_al_archivo>"
+    exit 1
+fi
+
+archivo=$2
+
+cat "$archivo"
+exit_code=$?
+
+echo "Código de salida: $exit_code"
+
+exit $exit_code
+
+3. Crea un script que cree un directorio y después copie dentro de él un fichero. Las rutas del
+directorio y fichero a copiar se pasarán como parámetros. Por lo tanto, recibirá 2 parámetros:
+A. Primer parámetro: La ruta del directorio a crear, incluyendo su nombre.
+B. Segundo parámetro: La ruta de un archivo existente.
+
+#!/bin/bash
+
+if [ $# -ne 2 ]; then
+    echo "Uso: $0 <ruta_del_directorio> <ruta_del_archivo>"
+    exit 1
+fi
+
+# Asignar los parámetros a variables
+directorio=$1
+archivo=$2
+
+# Crear el directorio (incluyendo rutas intermedias si no existen)
+mkdir -p "$directorio"
+if [ $? -ne 0 ]; then
+    echo "Error: No se pudo crear el directorio $directorio"
+    exit 1
+fi
+
+cp "$archivo" "$directorio"
+
+if [ $? -ne 0 ]; then
+    echo "Error: No se pudo copiar el archivo $archivo a $directorio"
+    exit 1
+fi
+
+echo "Archivo copiado exitosamente a $directorio"
+
+4. Crea un script que realice las siguientes tareas:
+A. Si el script no ha recibido ningún parámetro, que muestre el mensaje “No has
+introducido ningún parámetro” y termine el script.
+B. Si ha recibido algún parámetro:
+▪ Que diga cuantos parámetros ha recibido.
+▪ Que muestre los parámetros recibidos
+
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+    echo "No has introducido ningún parámetro"
+    exit 1
+fi
+
+echo "Has introducido $# parámetro(s)"
+echo "Los parámetros recibidos son:"
+
+for param in "$@"; do
+    echo "$param"
+done
+
