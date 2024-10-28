@@ -80,3 +80,79 @@ for param in "$@"; do
     echo "$param"
 done
 
+5. Modifica el script anterior, de manera que el script retorne un 1 en el caso A (después de
+mostrar el mensaje), y devuelva un 0 en el caso B (después de haber mostrado la información
+sobre los parámetros). Cuando pruebes este script ejecutándolo desde la terminal, tras
+ejecutarlo verifica su exit code.
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+    echo "No has introducido ningún parámetro"
+    exit 1  # Retorna 1 si no hay parámetros
+fi
+
+echo "Has introducido $# parámetro(s)"
+echo "Los parámetros recibidos son:"
+
+for param in "$@"; do
+    echo "$param"
+done
+
+exit 0
+
+6. Repite el ejercicio 3, pero verificando que se le han pasado al menos 2 parámetros, e
+informando adecuadamente si no recibe los parámetros esperados.
+
+#!/bin/bash
+
+if [ $# -lt 2 ]; then
+    echo "Error: Se requieren dos parámetros."
+    echo "Uso: $0 <ruta_del_directorio> <ruta_del_archivo>"
+    exit 1
+fi
+
+directorio=$1
+archivo=$2
+
+mkdir -p "$directorio"
+if [ $? -ne 0 ]; then
+    echo "Error: No se pudo crear el directorio $directorio"
+    exit 1
+fi
+
+cp "$archivo" "$directorio"
+if [ $? -ne 0 ]; then
+    echo "Error: No se pudo copiar el archivo $archivo a $directorio"
+    exit 1
+fi
+
+echo "Archivo copiado exitosamente a $directorio"
+exit 0
+
+7. Crea un script que reciba como parámetro la ruta a un archivo o directorio y, si existe, que nos
+indique si es un archivo o un directorio.
+
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+    echo "Error: Debes proporcionar la ruta a un archivo o directorio."
+    echo "Uso: $0 <ruta_al_archivo_o_directorio>"
+    exit 1
+fi
+
+ruta=$1
+
+if [ -e "$ruta" ]; then
+    # Verificar si es un archivo
+    if [ -f "$ruta" ]; then
+        echo "$ruta es un archivo."
+    # Verificar si es un directorio
+    elif [ -d "$ruta" ]; then
+        echo "$ruta es un directorio."
+    fi
+else
+    echo "La ruta $ruta no existe."
+    exit 1
+fi
+
+exit 0
